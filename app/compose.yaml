@@ -3,11 +3,43 @@ services:
     image: neosmemo/memos:stable
     container_name: memos
     restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
     ports:
       - "5230:5230"
     volumes:
       - ./data:/var/opt/memos
     environment:
-      MEMOS_PORT: 5230
-      MEMOS_DRIVER: sqlite
-      MEMOS_INSTANCE_URL: https://memos.example.com
+      MEMOS_PORT: "5230"
+      MEMOS_DRIVER: postgres
+      MEMOS_DSN: "postgres://memos:memospassword@postgres:5432/memos?sslmode=disable"
+      MEMOS_INSTANCE_URL: "http://localhost:5230"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5230/healthz | grep -q 'Service ready.'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  postgres:
+    image: postgres:16
+    container_name: memos-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: memos
+      POSTGRES_USER: memos
+      POSTGRES_PASSWORD: memospassword
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memos -d memos"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
