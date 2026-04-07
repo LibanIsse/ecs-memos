@@ -1,6 +1,9 @@
 services:
   memos:
-    image: neosmemo/memos:stable
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: memos-local:test
     container_name: memos
     restart: unless-stopped
     depends_on:
@@ -11,10 +14,10 @@ services:
     volumes:
       - ./data:/var/opt/memos
     environment:
-      MEMOS_PORT: "5230"
-      MEMOS_DRIVER: postgres
-      MEMOS_DSN: "postgres://memos:memospassword@postgres:5432/memos?sslmode=disable"
-      MEMOS_INSTANCE_URL: "http://localhost:5230"
+      MEMOS_PORT: "${MEMOS_PORT}"
+      MEMOS_DRIVER: "${MEMOS_DRIVER}"
+      MEMOS_DSN: "${MEMOS_DSN}"
+      MEMOS_INSTANCE_URL: "${MEMOS_INSTANCE_URL}"
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:5230/healthz | grep -q 'Service ready.'"]
       interval: 15s
@@ -27,15 +30,15 @@ services:
     container_name: memos-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: memos
-      POSTGRES_USER: memos
-      POSTGRES_PASSWORD: memospassword
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U memos -d memos"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
