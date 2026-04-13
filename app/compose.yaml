@@ -19,7 +19,7 @@ services:
       MEMOS_DSN: "${MEMOS_DSN}"
       MEMOS_INSTANCE_URL: "${MEMOS_INSTANCE_URL}"
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:5230/healthz | grep -q 'Service ready.'"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:5230/health | grep -q '\"status\":\"ok\"'"]
       interval: 15s
       timeout: 5s
       retries: 5
