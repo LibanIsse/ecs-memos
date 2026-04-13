@@ -2,7 +2,7 @@ services:
   memos:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     image: memos-local:test
     container_name: memos
     restart: unless-stopped
