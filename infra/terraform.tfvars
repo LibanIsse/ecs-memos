@@ -17,5 +17,6 @@ private_subnet_2_cidr = "10.0.4.0/24"
 availability_zone_1 = "eu-west-2a"
 availability_zone_2 = "eu-west-2b"
 
-igw_name                = "igw-ecs"
-public_route_table_name = "public-rt"
+igw_name                 = "igw-ecs"
+public_route_table_name  = "public-rt"
+private_route_table_name = "private-rt"

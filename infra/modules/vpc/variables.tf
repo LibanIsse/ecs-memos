@@ -85,3 +85,8 @@ variable "public_route_table_name" {
 
 }
 
+variable "private_route_table_name" {
+    description = "private rt name"
+    type = string
+
+}

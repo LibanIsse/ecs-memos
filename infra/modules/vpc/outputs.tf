@@ -27,3 +27,7 @@ output "private_subnet_2_id" {
 
 }
 
+output "eip_nat" {
+    value = aws_eip.eip_nat.id
+
+}
