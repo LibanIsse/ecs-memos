@@ -71,7 +71,7 @@ variable "availability_zone_2" {
 }
 
 
-# Internet gateway and route tables
+# Internet gateway and route table
 
 variable "igw_name" {
     description = "internet gateway"

@@ -76,15 +76,13 @@ variable "availability_zone_2" {
   type        = string
 }
 
-# internet gateway and route tables
+# internet gateway and route table
 
 variable "igw_name" {
   description = "internet gateway"
   type        = string
 
 }
-
-# Route table
 
 variable "public_route_table_name" {
   description = "name of public route table"
