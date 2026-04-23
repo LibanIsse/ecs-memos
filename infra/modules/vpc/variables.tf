@@ -1,10 +1,10 @@
+# VPC
 variable "vpc_cidr" {
     description = "cidr block for vpc"
     type = string
 
 }
 
-# VPC
 variable "vpc_name" {
     description = "name of vpc"
     type = string
@@ -69,3 +69,19 @@ variable "availability_zone_2" {
     description = "az 2"
     type = string
 }
+
+
+# Internet gateway and route tables
+
+variable "igw_name" {
+    description = "internet gateway"
+    type = string
+
+}
+
+variable "public_route_table_name" {
+    description = "name of public route table"
+    type = string
+
+}
+

@@ -75,3 +75,21 @@ variable "availability_zone_2" {
   description = "az 2"
   type        = string
 }
+
+# internet gateway and route tables
+
+variable "igw_name" {
+  description = "internet gateway"
+  type        = string
+
+}
+
+# Route table
+
+variable "public_route_table_name" {
+  description = "name of public route table"
+  type        = string
+
+
+}
+
