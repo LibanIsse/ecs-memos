@@ -131,3 +131,47 @@ resource "aws_route_table_association" "private_subnet_2" {
   subnet_id = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private.id
 }
+
+## Security groups
+
+resource "aws_security_group" "alb_sg" {
+  name        = "alb-sg"
+  description = "Allow Traffic into ALB"
+  vpc_id      = aws_vpc.main.id
+
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_http_alb" {
+  security_group_id = aws_security_group.alb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  ip_protocol       = "tcp"
+  to_port           = 80
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_alb_out" {
+  security_group_id = aws_security_group.alb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
+
+resource "aws_security_group" "task_sg" {
+  name        = "task-sg"
+  description = "Allow Traffic to ecs task"
+  vpc_id      = aws_vpc.main.id
+
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_traffic_alb" {
+  security_group_id = aws_security_group.task_sg.id
+  referenced_security_group_id = aws_security_group.alb_sg.id
+  from_port         = 5230
+  ip_protocol       = "tcp"
+  to_port           = 5230
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_task_out" {
+  security_group_id = aws_security_group.task_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # semantically equivalent to all ports
+}
