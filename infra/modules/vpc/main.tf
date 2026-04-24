@@ -1,3 +1,4 @@
+# Create VPC
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
@@ -6,7 +7,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-## Subnets
+## Create the Subnets
 resource "aws_subnet" "public_subnet_1" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.public_subnet_1_cidr
@@ -49,7 +50,7 @@ resource "aws_subnet" "private_subnet_2" {
   }
 }
 
-## Internet gateway and route tables
+## Internet gateway
 resource "aws_internet_gateway" "gw" {
 
   vpc_id = aws_vpc.main.id
@@ -60,6 +61,7 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
+#route tables public
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -85,11 +87,12 @@ resource "aws_route_table_association" "public_subnet_2" {
   route_table_id = aws_route_table.public.id
 }
 
+# Create Elastip ip for Nat
 resource "aws_eip" "eip_nat" {
   domain   = "vpc"
 }
 
-
+# Create nat gateway
 resource "aws_nat_gateway" "nat_gw" {
   allocation_id = aws_eip.eip_nat.id
   subnet_id     = aws_subnet.public_subnet_1.id
@@ -103,6 +106,7 @@ resource "aws_nat_gateway" "nat_gw" {
   depends_on = [aws_internet_gateway.gw]
 }
 
+# Route tables private
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
