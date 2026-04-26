@@ -57,7 +57,7 @@ resource "aws_internet_gateway" "gw" {
 
 
   tags = {
-    Name = var.igw_name
+    Name = "igw-name"
   }
 }
 
@@ -67,7 +67,7 @@ resource "aws_route_table" "public" {
 
 
   tags = {
-    Name = var.public_route_table_name
+    Name = "public route table name"
   }
 }
 
@@ -111,7 +111,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = var.private_route_table_name
+    Name = "private route table name"
   }
 
 }
