@@ -90,6 +90,10 @@ resource "aws_route_table_association" "public_subnet_2" {
 # Create Elastip ip for Nat
 resource "aws_eip" "eip_nat" {
   domain   = "vpc"
+
+  tags = {
+    Name = "Elastic ip"
+  }
 }
 
 # Create nat gateway

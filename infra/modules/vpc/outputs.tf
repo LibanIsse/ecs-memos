@@ -1,6 +1,6 @@
 output "vpc_name_id" {
     description = "id of the vpc"
-    value = aws_vpc.main
+    value = aws_vpc.main.id
 
 }
 
@@ -31,3 +31,10 @@ output "eip_nat" {
     value = aws_eip.eip_nat.id
 
 }
+
+output "alb_security_group_id" {
+    description = "alb sg"
+    value = aws_security_group.alb_sg.id
+
+}
+
