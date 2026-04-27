@@ -27,11 +27,6 @@ output "private_subnet_2_id" {
 
 }
 
-output "eip_nat" {
-    value = aws_eip.eip_nat.id
-
-}
-
 output "alb_security_group_id" {
     description = "alb sg"
     value = aws_security_group.alb_sg.id
