@@ -1,3 +1,4 @@
+## create ALB
 resource "aws_lb" "alb_ecs" {
   name               = "alb-memos"
   internal           = false
@@ -11,6 +12,7 @@ resource "aws_lb" "alb_ecs" {
 
 }
 
+## create ALB target group
 resource "aws_lb_target_group" "alb_tg" {
   name        = "memos-alb-tg"
   port        = 5230
@@ -26,6 +28,7 @@ resource "aws_lb_target_group" "alb_tg" {
 
 }
 
+## create ALB listener
 resource "aws_lb_listener" "alb_http" {
   load_balancer_arn = aws_lb.alb_ecs.arn
   port              = 80

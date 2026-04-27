@@ -25,3 +25,14 @@ module "alb" {
   vpc_id             = module.vpc.vpc_name_id
 
 }
+
+module "rds" {
+  source              = "./modules/rds"
+  task_sg             = module.vpc.task_sg_id
+  alb_sg_id           = module.vpc.alb_security_group_id
+  private_subnet_1_id = module.vpc.private_subnet_1_id
+  private_subnet_2_id = module.vpc.private_subnet_2_id
+  vpc_id              = module.vpc.vpc_name_id
+  db_password         = var.db_password
+
+}

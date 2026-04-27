@@ -76,3 +76,9 @@ variable "availability_zone_2" {
   type        = string
 }
 
+variable "db_password" {
+  description = "rds password"
+  type        = string
+  sensitive   = true
+}
+

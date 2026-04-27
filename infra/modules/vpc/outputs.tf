@@ -33,3 +33,8 @@ output "alb_security_group_id" {
 
 }
 
+output "task_sg_id" {
+    description = "task sg"
+    value = aws_security_group.task_sg.id
+
+}
