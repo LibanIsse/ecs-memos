@@ -1,3 +1,11 @@
 .DS_Store
 .env
 *.log
+
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
