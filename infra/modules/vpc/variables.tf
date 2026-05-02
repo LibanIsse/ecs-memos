@@ -13,24 +13,24 @@ variable "vpc_name" {
 }
 
 # All Subnets
-variable "public_subnet_1_name" {
+variable "public_subnet_1" {
     description = "public subnet 1"
     type = string
 
 }
 
-variable "public_subnet_2_name" {
+variable "public_subnet_2" {
     description = "public subnet 2"
     type = string
 }
 
-variable "private_subnet_1_name" {
+variable "private_subnet_1" {
     description = "private subnet 1"
     type = string
 
 }
 
-variable "private_subnet_2_name" {
+variable "private_subnet_2" {
     description = "private subnet 2"
     type = string
 
@@ -60,13 +60,13 @@ variable "private_subnet_2_cidr" {
 
 }
 
-variable "availability_zone_1" {
-    description = "az 1"
+variable "a_z_1" {
+    description = "availability zone 1"
     type = string
 }
 
-variable "availability_zone_2" {
-    description = "az 2"
+variable "a_z_2" {
+    description = "availability zone 2"
     type = string
 }
 
