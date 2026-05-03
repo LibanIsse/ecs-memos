@@ -17,3 +17,8 @@ variable "vpc_id" {
   type = string
 }
 
+variable "certificate_arn" {
+  description = "acm certificate"
+  type = string
+
+}
