@@ -1,3 +1,4 @@
+# Create task execution role
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ecs-task-execution-role-memos"
 
