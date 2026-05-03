@@ -24,7 +24,7 @@ module "alb" {
   public_subnet_2_id = module.vpc.public_subnet_2_id
   vpc_id             = module.vpc.vpc_name_id
   certificate_arn    = module.acm.certificate_arn
-  
+
 }
 
 module "rds" {
