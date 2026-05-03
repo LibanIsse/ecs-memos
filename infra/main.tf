@@ -1,5 +1,5 @@
 module "vpc" {
-  source                = "./modules/VPC"
+  source                = "./modules/vpc"
   vpc_cidr              = var.vpc_cidr
   vpc_name              = var.vpc_name
   public_subnet_1       = var.public_subnet_1
@@ -18,13 +18,13 @@ module "vpc" {
 }
 
 module "alb" {
-  source             = "./modules/ALB"
+  source             = "./modules/alb"
   alb_sg_id          = module.vpc.alb_security_group_id
   public_subnet_1_id = module.vpc.public_subnet_1_id
   public_subnet_2_id = module.vpc.public_subnet_2_id
   vpc_id             = module.vpc.vpc_name_id
   certificate_arn    = module.acm.certificate_arn
-
+  
 }
 
 module "rds" {
@@ -40,17 +40,17 @@ module "rds" {
 
 
 module "ecr" {
-  source = "./modules/ECR"
+  source = "./modules/ecr"
 
 }
 
 module "iam" {
-  source = "./modules/IAM"
+  source = "./modules/iam"
 
 }
 
 module "ecs" {
-  source = "./modules/ECS"
+  source = "./modules/ecs"
 
   execution_role_arn  = module.iam.ecs_task_execution_role_arn
   private_subnet_1_id = module.vpc.private_subnet_1_id
@@ -65,4 +65,13 @@ module "acm" {
   source = "./modules/acm"
 
 
+}
+
+module "route53" {
+  source = "./modules/route53"
+
+  hosted_zone_name = var.hosted_zone_name
+  record_name      = "tm"
+  alb_dns_name     = module.alb.alb_dns_name
+  alb_zone_id      = module.alb.alb_zone_id
 }
