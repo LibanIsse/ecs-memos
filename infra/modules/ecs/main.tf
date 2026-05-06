@@ -86,7 +86,11 @@ resource "aws_ecs_service" "memos" {
     container_port   = 5230
   }
 
-  
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
+
+
 
   depends_on = [aws_ecs_task_definition.memos]
 }
