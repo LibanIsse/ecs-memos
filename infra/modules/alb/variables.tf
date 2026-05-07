@@ -4,21 +4,21 @@ variable "alb_sg_id" {
 
 variable "public_subnet_1_id" {
   description = "public subnet 2"
-  type = string
+  type        = string
 }
 
 variable "public_subnet_2_id" {
   description = "public subnet"
-  type = string
+  type        = string
 }
 
 variable "vpc_id" {
   description = "vpc"
-  type = string
+  type        = string
 }
 
 variable "certificate_arn" {
   description = "acm certificate"
-  type = string
+  type        = string
 
 }

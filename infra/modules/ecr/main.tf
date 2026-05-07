@@ -1,6 +1,6 @@
 #create ecr repository
 resource "aws_ecr_repository" "memos_repo" {
-  name = "ecsmemos"
+  name                 = "ecsmemos"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 

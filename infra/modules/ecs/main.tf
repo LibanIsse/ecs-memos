@@ -16,9 +16,9 @@ resource "aws_ecs_task_definition" "memos" {
   network_mode             = "awsvpc"
   cpu                      = "512"
   memory                   = "1024"
-  execution_role_arn = var.execution_role_arn
+  execution_role_arn       = var.execution_role_arn
 
-   runtime_platform {
+  runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "ARM64"
   }
@@ -39,15 +39,15 @@ resource "aws_ecs_task_definition" "memos" {
       ]
 
       environment = [
-  {
-    name  = "MEMOS_DRIVER"
-    value = "postgres"
-  },
-  {
-    name  = "MEMOS_DSN"
-    value = local.memos_dsn
-  }
-]
+        {
+          name  = "MEMOS_DRIVER"
+          value = "postgres"
+        },
+        {
+          name  = "MEMOS_DSN"
+          value = local.memos_dsn
+        }
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"

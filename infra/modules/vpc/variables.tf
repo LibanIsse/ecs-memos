@@ -1,73 +1,73 @@
 # VPC
 variable "vpc_cidr" {
-    description = "cidr block for vpc"
-    type = string
+  description = "cidr block for vpc"
+  type        = string
 
 }
 
 variable "vpc_name" {
-    description = "name of vpc"
-    type = string
+  description = "name of vpc"
+  type        = string
 
 
 }
 
 # All Subnets
 variable "public_subnet_1" {
-    description = "public subnet 1"
-    type = string
+  description = "public subnet 1"
+  type        = string
 
 }
 
 variable "public_subnet_2" {
-    description = "public subnet 2"
-    type = string
+  description = "public subnet 2"
+  type        = string
 }
 
 variable "private_subnet_1" {
-    description = "private subnet 1"
-    type = string
+  description = "private subnet 1"
+  type        = string
 
 }
 
 variable "private_subnet_2" {
-    description = "private subnet 2"
-    type = string
+  description = "private subnet 2"
+  type        = string
 
 }
 
 variable "public_subnet_1_cidr" {
-    description = "public 1 cidr block"
-    type = string
+  description = "public 1 cidr block"
+  type        = string
 
 }
 
 variable "public_subnet_2_cidr" {
-    description = "public 2 cidr block"
-    type = string
+  description = "public 2 cidr block"
+  type        = string
 
 }
 
 variable "private_subnet_1_cidr" {
-    description = "private1 cidr block"
-    type = string
+  description = "private1 cidr block"
+  type        = string
 
 }
 
 variable "private_subnet_2_cidr" {
-    description = "private 2 cidr block"
-    type = string
+  description = "private 2 cidr block"
+  type        = string
 
 }
 
 variable "a_z_1" {
-    description = "availability zone 1"
-    type = string
+  description = "availability zone 1"
+  type        = string
 }
 
 variable "a_z_2" {
-    description = "availability zone 2"
-    type = string
+  description = "availability zone 2"
+  type        = string
 }
 
 

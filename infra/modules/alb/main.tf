@@ -20,7 +20,7 @@ resource "aws_lb_target_group" "alb_tg" {
   target_type = "ip"
   vpc_id      = var.vpc_id
 
- health_check {
+  health_check {
     path     = "/health"
     protocol = "HTTP"
     matcher  = "200"
@@ -35,7 +35,7 @@ resource "aws_lb_listener" "alb_http" {
   protocol          = "HTTP"
 
   default_action {
-    type             = "redirect"
+    type = "redirect"
 
     redirect {
       port        = "443"

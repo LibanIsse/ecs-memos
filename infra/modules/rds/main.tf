@@ -20,11 +20,11 @@ resource "aws_security_group" "rds_sg" {
 
 # Create DB ingress and egress rules
 resource "aws_vpc_security_group_ingress_rule" "rds_in" {
-  security_group_id = aws_security_group.rds_sg.id
+  security_group_id            = aws_security_group.rds_sg.id
   referenced_security_group_id = var.task_sg
-  from_port         = 5432
-  ip_protocol       = "tcp"
-  to_port           = 5432
+  from_port                    = 5432
+  ip_protocol                  = "tcp"
+  to_port                      = 5432
 }
 
 resource "aws_vpc_security_group_egress_rule" "rds_out" {
@@ -35,18 +35,18 @@ resource "aws_vpc_security_group_egress_rule" "rds_out" {
 
 ## create DB postgress
 resource "aws_db_instance" "postgres_db" {
-  identifier             = "database-1"
-  allocated_storage      = 20
-  db_name                = "database1"
-  engine                 = "postgres"
-  engine_version         = "17.4"
-  instance_class         = "db.t3.micro"
-  username               = "postgres"
-  password               = var.db_password
-  storage_type           = "gp3"
-  publicly_accessible    = false
-  skip_final_snapshot    = true
-  multi_az               = false
+  identifier              = "database-1"
+  allocated_storage       = 20
+  db_name                 = "database1"
+  engine                  = "postgres"
+  engine_version          = "17.4"
+  instance_class          = "db.t3.micro"
+  username                = "postgres"
+  password                = var.db_password
+  storage_type            = "gp3"
+  publicly_accessible     = false
+  skip_final_snapshot     = true
+  multi_az                = false
   backup_retention_period = 0
 
   db_subnet_group_name   = aws_db_subnet_group.rds_subnets.name

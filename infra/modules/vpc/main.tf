@@ -9,9 +9,9 @@ resource "aws_vpc" "main" {
 
 ## Create the Subnets
 resource "aws_subnet" "public_subnet_1" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public_subnet_1_cidr
-  availability_zone = var.a_z_1
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_1_cidr
+  availability_zone       = var.a_z_1
   map_public_ip_on_launch = true
 
   tags = {
@@ -20,9 +20,9 @@ resource "aws_subnet" "public_subnet_1" {
 }
 
 resource "aws_subnet" "public_subnet_2" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public_subnet_2_cidr
-  availability_zone = var.a_z_2
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = var.public_subnet_2_cidr
+  availability_zone       = var.a_z_2
   map_public_ip_on_launch = true
 
   tags = {
@@ -31,8 +31,8 @@ resource "aws_subnet" "public_subnet_2" {
 }
 
 resource "aws_subnet" "private_subnet_1" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.private_subnet_1_cidr
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_1_cidr
   availability_zone = var.a_z_1
 
   tags = {
@@ -41,8 +41,8 @@ resource "aws_subnet" "private_subnet_1" {
 }
 
 resource "aws_subnet" "private_subnet_2" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.private_subnet_2_cidr
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = var.private_subnet_2_cidr
   availability_zone = var.a_z_2
 
   tags = {
@@ -78,18 +78,18 @@ resource "aws_route" "public_access" {
 }
 
 resource "aws_route_table_association" "public_subnet_1" {
-  subnet_id = aws_subnet.public_subnet_1.id
+  subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "public_subnet_2" {
-  subnet_id = aws_subnet.public_subnet_2.id
+  subnet_id      = aws_subnet.public_subnet_2.id
   route_table_id = aws_route_table.public.id
 }
 
 # Create Elastip ip for Nat
 resource "aws_eip" "eip_nat" {
-  domain   = "vpc"
+  domain = "vpc"
 
   tags = {
     Name = "Elastic ip"
@@ -127,12 +127,12 @@ resource "aws_route" "private_access" {
 }
 
 resource "aws_route_table_association" "private_subnet_1" {
-  subnet_id = aws_subnet.private_subnet_1.id
+  subnet_id      = aws_subnet.private_subnet_1.id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "private_subnet_2" {
-  subnet_id = aws_subnet.private_subnet_2.id
+  subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private.id
 }
 
@@ -177,11 +177,11 @@ resource "aws_security_group" "task_sg" {
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_traffic_alb" {
-  security_group_id = aws_security_group.task_sg.id
+  security_group_id            = aws_security_group.task_sg.id
   referenced_security_group_id = aws_security_group.alb_sg.id
-  from_port         = 5230
-  ip_protocol       = "tcp"
-  to_port           = 5230
+  from_port                    = 5230
+  ip_protocol                  = "tcp"
+  to_port                      = 5230
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_task_out" {
