@@ -1,7 +1,7 @@
 # Front end build
 FROM node:24-alpine AS frontend
 WORKDIR /app
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@10.33.4 --activate
 COPY web/package.json web/pnpm-lock.yaml ./web/
 RUN cd web && pnpm install --frozen-lockfile
 COPY . .
