@@ -1,8 +1,3 @@
-variable "alb_sg_id" {
-  description = "alb sg"
-  type        = string
-}
-
 variable "private_subnet_1_id" {
   description = "private subnet 1"
   type        = string
