@@ -40,7 +40,7 @@ jobs:
         uses: terraform-linters/setup-tflint@v4
 
       - name: Terraform fmt
-        run: terraform fmt -check -recursive
+        run: tflint --recursive --minimum-failure-severity=error
 
       - name: Terraform init
         run: terraform init
