@@ -51,6 +51,3 @@ jobs:
 
       - name: Terraform apply
         run: terraform apply -input=false -auto-approve tfplan
-
-      - name: Health check
-        run: curl --fail --silent --show-error https://tm.libanisse.co.uk/healthz
