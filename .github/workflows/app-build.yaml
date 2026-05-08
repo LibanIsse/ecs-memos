@@ -2,8 +2,10 @@ name: Build Scan Push Docker Image
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/app-build.yaml"
   workflow_dispatch:
 
 permissions:
