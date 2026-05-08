@@ -26,11 +26,14 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-          aws-region: eu-west-2
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Set image variables
         run: |
@@ -43,7 +46,11 @@ jobs:
 
       - name: Build Docker image with Git SHA
         run: |
-          docker build -t "${IMAGE_URI}" ./app
+          docker buildx build \
+            --platform linux/amd64 \
+            --load \
+            -t "${IMAGE_URI}" \
+            ./app
 
       - name: Security scan with Grype
         uses: anchore/scan-action@v7
@@ -55,6 +62,7 @@ jobs:
           output-file: grype-results.json
 
       - name: Upload Grype scan report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: grype-security-scan
