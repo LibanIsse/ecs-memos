@@ -76,12 +76,6 @@ variable "a_z_2" {
   type        = string
 }
 
-variable "db_password" {
-  description = "rds password"
-  type        = string
-  sensitive   = true
-}
-
 variable "hosted_zone_name" {
   description = "domain name"
   type        = string
