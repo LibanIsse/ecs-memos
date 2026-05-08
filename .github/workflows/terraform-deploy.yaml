@@ -15,6 +15,7 @@ permissions:
 env:
   AWS_REGION: eu-west-2
   TF_WORKING_DIR: infra
+  TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
 
 jobs:
   deploy:
@@ -46,10 +47,10 @@ jobs:
         run: terraform validate
 
       - name: Terraform plan
-        run: terraform plan -out=tfplan
+        run: terraform plan -input=false -out=tfplan
 
       - name: Terraform apply
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -input=false -auto-approve tfplan
 
       - name: Health check
-        run: curl --fail --silent --show-error https://tm.libanisse.co.uk/healthz
+        run: curl --fail --silent --show-error https://tm.libanisse.co.uk/health
