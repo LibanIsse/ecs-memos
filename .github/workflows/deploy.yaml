@@ -96,4 +96,4 @@ jobs:
           wait-for-service-stability: true
 
       - name: Health check
-        run: curl --fail --silent --show-error https://tm.libanisse.co.uk/health
+        run: curl --fail --silent --show-error ${{ vars.APP_URL }}/health
