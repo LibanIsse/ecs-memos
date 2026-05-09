@@ -27,7 +27,7 @@ resource "aws_ecs_task_definition" "memos" {
   container_definitions = jsonencode([
     {
       name      = "memos"
-      image     = "527814729206.dkr.ecr.eu-west-2.amazonaws.com/ecsmemos:c43824218aa435f7f9795451ab842f077bd0e337"
+      image     = "527814729206.dkr.ecr.eu-west-2.amazonaws.com/ecsmemos:latest"
       essential = true
 
       portMappings = [
