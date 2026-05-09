@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "app/**"
-      - ".github/workflows/ci.yml"
+      - ".github/workflows/ci.yaml"
   workflow_dispatch:
 
 jobs:
