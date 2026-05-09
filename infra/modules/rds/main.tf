@@ -25,6 +25,7 @@ resource "aws_vpc_security_group_ingress_rule" "rds_in" {
   from_port                    = 5432
   ip_protocol                  = "tcp"
   to_port                      = 5432
+  description                  = "Allow PostgreSQL traffic from ECS tasks to RDS"
 }
 
 resource "aws_vpc_security_group_egress_rule" "rds_out" {
@@ -44,6 +45,7 @@ resource "aws_db_instance" "postgres_db" {
   username                = "postgres"
   password                = var.db_password
   storage_type            = "gp3"
+  storage_encrypted       = true
   publicly_accessible     = false
   skip_final_snapshot     = true
   multi_az                = false

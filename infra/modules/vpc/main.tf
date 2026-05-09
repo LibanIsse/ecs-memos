@@ -151,6 +151,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http_alb" {
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+  description       = "Allow HTTP traffic from the internet to the ALB"
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_https_alb" {
@@ -159,6 +160,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_alb" {
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+  description       = "Allow HTTPS traffic from the internet to the ALB"
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_alb_out" {
@@ -182,6 +184,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_traffic_alb" {
   from_port                    = 5230
   ip_protocol                  = "tcp"
   to_port                      = 5230
+  description                  = "Allow ALB traffic to ECS tasks on application port"
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_task_out" {
