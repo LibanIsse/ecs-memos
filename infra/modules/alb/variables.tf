@@ -22,3 +22,23 @@ variable "certificate_arn" {
   type        = string
 
 }
+
+variable "alb_name" {
+  type    = string
+  default = "alb-memos"
+}
+
+variable "target_group_name" {
+  type    = string
+  default = "memos-alb-tg"
+}
+
+variable "target_group_port" {
+  type    = number
+  default = 5230
+}
+
+variable "health_check_path" {
+  type    = string
+  default = "/health"
+}

@@ -1,6 +1,6 @@
 # Create ALB
 resource "aws_lb" "alb_ecs" {
-  name               = "alb-memos"
+  name               = var.alb_name
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.alb_sg_id]
@@ -14,14 +14,14 @@ resource "aws_lb" "alb_ecs" {
 
 # Create ALB target group
 resource "aws_lb_target_group" "alb_tg" {
-  name        = "memos-alb-tg"
-  port        = 5230
+  name        = var.target_group_name
+  port        = var.target_group_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = var.vpc_id
 
   health_check {
-    path     = "/health"
+    path     = var.health_check_path
     protocol = "HTTP"
     matcher  = "200"
   }
