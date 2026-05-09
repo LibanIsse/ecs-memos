@@ -1,0 +1,99 @@
+name: App Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/deploy.yaml"
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: eu-west-2
+  ECR_REPOSITORY: ecsmemos
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Set image variables
+        run: |
+          IMAGE_TAG=${GITHUB_SHA}
+          REGISTRY=${{ steps.login-ecr.outputs.registry }}
+          IMAGE_URI=${REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          LATEST_IMAGE_URI=${REGISTRY}/${ECR_REPOSITORY}:latest
+
+          echo "IMAGE_TAG=${IMAGE_TAG}" >> $GITHUB_ENV
+          echo "IMAGE_URI=${IMAGE_URI}" >> $GITHUB_ENV
+          echo "LATEST_IMAGE_URI=${LATEST_IMAGE_URI}" >> $GITHUB_ENV
+
+      - name: Build Docker image
+        run: docker build -t "${IMAGE_URI}" -t "${LATEST_IMAGE_URI}" ./app
+
+      - name: Scan image with Grype
+        uses: anchore/scan-action@v7
+        with:
+          image: ${{ env.IMAGE_URI }}
+          fail-build: true
+          severity-cutoff: high
+
+      - name: Push image to ECR
+        run: |
+          docker push "${IMAGE_URI}"
+          docker push "${LATEST_IMAGE_URI}"
+
+      - name: Download ECS task definition
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition ${{ vars.ECS_TASK_DEFINITION_FAMILY }} \
+            --query taskDefinition \
+            > task-definition-raw.json
+
+      - name: Clean ECS task definition
+        run: |
+          jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' task-definition-raw.json > task-definition.json
+
+      - name: Render new ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ vars.ECS_CONTAINER_NAME }}
+          image: ${{ env.IMAGE_URI }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: ${{ vars.ECS_SERVICE }}
+          cluster: ${{ vars.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      - name: Health check
+        run: curl --fail --silent --show-error https://tm.libanisse.co.uk/health
