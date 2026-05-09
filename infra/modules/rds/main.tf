@@ -38,12 +38,12 @@ resource "aws_vpc_security_group_egress_rule" "rds_out" {
 ## create DB postgress
 resource "aws_db_instance" "postgres_db" {
   identifier              = "database-1"
-  allocated_storage       = 20
-  db_name                 = "database1"
+  allocated_storage       = var.allocated_storage
+  db_name                 = var.db_name
   engine                  = "postgres"
   engine_version          = "17.4"
-  instance_class          = "db.t3.micro"
-  username                = "postgres"
+  instance_class          = var.db_instance_class
+  username                = var.db_username
   password                = var.db_password
   storage_type            = "gp3"
   storage_encrypted       = true

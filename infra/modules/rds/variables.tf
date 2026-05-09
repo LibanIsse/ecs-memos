@@ -25,3 +25,24 @@ variable "db_password" {
 
 
 }
+
+variable "db_name" {
+  type    = string
+  default = "database1"
+}
+
+variable "db_username" {
+  type    = string
+  default = "postgres"
+}
+
+variable "db_instance_class" {
+  type    = string
+  default = "db.t3.micro"
+}
+
+variable "allocated_storage" {
+  type    = number
+  default = 20
+}
+
