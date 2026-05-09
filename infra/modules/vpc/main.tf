@@ -167,6 +167,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_alb_out" {
   security_group_id = aws_security_group.alb_sg.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
+  description       = "Allow outbound traffic from the ALB"
 }
 
 
