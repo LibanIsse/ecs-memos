@@ -1,7 +1,7 @@
 # Create cloudwatch log
 resource "aws_cloudwatch_log_group" "memos" {
-  name              = "/ecs/memos-logs"
-  retention_in_days = 7
+  name              = var.log_group_name
+  retention_in_days = var.log_retention_days
 }
 
 # Create ECS Cluster
@@ -11,11 +11,11 @@ resource "aws_ecs_cluster" "main" {
 
 # Create ECS Task Defintion
 resource "aws_ecs_task_definition" "memos" {
-  family                   = "memos-td"
+  family                   = var.task_family
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = "512"
-  memory                   = "1024"
+  cpu                      = var.ecs_cpu
+  memory                   = var.ecs_memory
   execution_role_arn       = var.execution_role_arn
 
   runtime_platform {
@@ -26,14 +26,14 @@ resource "aws_ecs_task_definition" "memos" {
 
   container_definitions = jsonencode([
     {
-      name      = "memos"
-      image     = "527814729206.dkr.ecr.eu-west-2.amazonaws.com/ecsmemos:latest"
+      name      = var.container_name
+      image     = var.container_image
       essential = true
 
       portMappings = [
         {
-          containerPort = 5230
-          hostPort      = 5230
+          containerPort = var.container_port
+          hostPort      = var.container_port
           protocol      = "tcp"
         }
       ]
@@ -71,7 +71,7 @@ resource "aws_ecs_service" "memos" {
   name            = "memos-service"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.memos.arn
-  desired_count   = 1
+  desired_count   = var.desired_count
   launch_type     = "FARGATE"
 
   network_configuration {
@@ -82,13 +82,13 @@ resource "aws_ecs_service" "memos" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = "memos"
-    container_port   = 5230
+    container_name   = var.container_name
+    container_port   = var.container_port
   }
 
-  #lifecycle {
-  # ignore_changes = [task_definition]
-  #}
+  lifecycle {
+    ignore_changes = [task_definition]
+  }
 
 
 

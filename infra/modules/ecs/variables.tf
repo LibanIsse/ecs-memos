@@ -26,3 +26,48 @@ variable "db_password" {
 variable "rds_endpoint" {
   type = string
 }
+
+variable "task_family" {
+  type    = string
+  default = "memos-td"
+}
+
+variable "container_name" {
+  type    = string
+  default = "memos"
+}
+
+variable "container_port" {
+  type    = number
+  default = 5230
+}
+
+variable "ecs_cpu" {
+  type    = string
+  default = "512"
+}
+
+variable "ecs_memory" {
+  type    = string
+  default = "1024"
+}
+
+variable "desired_count" {
+  type    = number
+  default = 1
+}
+
+variable "log_group_name" {
+  type    = string
+  default = "/ecs/memos-logs"
+}
+
+variable "log_retention_days" {
+  type    = number
+  default = 7
+}
+
+variable "container_image" {
+  type    = string
+  default = "527814729206.dkr.ecr.eu-west-2.amazonaws.com/ecsmemos:latest"
+}
