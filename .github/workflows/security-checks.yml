@@ -52,3 +52,5 @@ jobs:
 
       - name: Secret scan with Gitleaks
         uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_CONFIG: .gitleaks.toml
