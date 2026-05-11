@@ -7,9 +7,7 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 .terraform.tfstate.lock.info
-.terraform.tfvars
 terraform.tfvarsterraform.tfvars
-**/terraform.tfvars
 *.tfstate
 *.tfstate.*
 .terraform/
