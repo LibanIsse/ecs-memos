@@ -5,7 +5,7 @@ on:
     paths:
       - "app/**"
       - "infra/**"
-      - ".github/workflows/security.yml"
+      - ".github/workflows/security-checks.yml"
   workflow_dispatch:
 
 permissions:
