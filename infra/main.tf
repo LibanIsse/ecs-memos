@@ -12,9 +12,6 @@ module "vpc" {
   private_subnet_2_cidr = var.private_subnet_2_cidr
   a_z_1                 = var.a_z_1
   a_z_2                 = var.a_z_2
-
-
-
 }
 
 module "alb" {
@@ -24,7 +21,6 @@ module "alb" {
   public_subnet_2_id = module.vpc.public_subnet_2_id
   vpc_id             = module.vpc.vpc_name_id
   certificate_arn    = module.acm.certificate_arn
-
 }
 
 module "rds" {
@@ -34,18 +30,14 @@ module "rds" {
   private_subnet_2_id = module.vpc.private_subnet_2_id
   vpc_id              = module.vpc.vpc_name_id
   db_password         = var.db_password
-
 }
-
 
 module "ecr" {
   source = "./modules/ecr"
-
 }
 
 module "iam" {
   source = "./modules/iam"
-
 }
 
 module "ecs" {
@@ -62,8 +54,6 @@ module "ecs" {
 
 module "acm" {
   source = "./modules/acm"
-
-
 }
 
 module "route53" {
