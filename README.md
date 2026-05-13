@@ -38,7 +38,6 @@ The infrastructure includes a custom multi-AZ VPC, public/private subnets, ALB, 
 
 ## Repository Structure
 
-```text
 MEMOS-ON-FARGATE
 ├── app/                         # Application source code and Dockerfile
 │   ├── Dockerfile
@@ -61,14 +60,17 @@ MEMOS-ON-FARGATE
 │       ├── route53/
 │       └── vpc/
 │
-├── .github/workflows/
-│   ├── ci.yml                   # Build Docker image, scan and push to ECR
-│   ├── deploy.yml               # Update ECS task definition, deploy service and check app health
-│   ├── security-checks.yml      # Trivy, Gitleaks and Checkov security checks
-│   ├── terraform-plan.yml       # Terraform fmt, init, validate and plan
-│   ├── terraform-apply.yml      # Provision/update infrastructure
-│   ├── terraform-destroy.yml    # Manual infrastructure teardown
-│   └── drift-detection.yml      # Scheduled/manual Terraform drift check
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml                   # Build Docker image, scan and push to ECR
+│   │   ├── deploy.yml               # Update ECS task definition, deploy service and check app health
+│   │   ├── drift-detection.yml      # Scheduled/manual Terraform drift check
+│   │   ├── sbom.yml                 # Generate Software Bill of Materials
+│   │   ├── security-checks.yml      # Trivy, Gitleaks and Checkov security checks
+│   │   ├── terraform-plan.yml       # Terraform fmt, init, validate and plan
+│   │   ├── terraform-apply.yml      # Provision/update infrastructure
+│   │   └── terraform-destroy.yml    # Manual infrastructure teardown
+│   └── dependabot.yml               # Dependency update configuration
 │
 ├── screenshots/
 │   ├── app-demo.gif
@@ -77,7 +79,6 @@ MEMOS-ON-FARGATE
 │
 ├── .gitignore
 └── README.md
-```
 
 ## Local Setup
 
@@ -194,6 +195,22 @@ Manual workflow used to destroy the infrastructure when it is no longer needed.
 ```
 
 Checks whether the live AWS infrastructure still matches the Terraform code. It runs on a schedule and sends a Slack notification if drift is found.
+
+### Dependabot Updates
+
+```text
+.github/dependabot.yml
+```
+
+Checks for dependency updates and opens pull requests when newer versions are available. It is used to keep GitHub Actions, Terraform providers, Docker dependencies, and application packages up to date.
+
+### SBOM Generation
+
+```text
+.github/workflows/sbom.yml
+```
+
+Generates a Software Bill of Materials for the project. It lists the packages and dependencies included in the application build to support supply chain security and vulnerability tracking.
 
 ## Screenshots
 
