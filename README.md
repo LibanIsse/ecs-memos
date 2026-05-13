@@ -19,6 +19,7 @@ The demo below shows the application running through the HTTPS domain, successfu
 ![App Demo](./screenshots/app-demo.gif)
 
 ## Architecture
+The diagram shows the full request flow from Route 53 and the Application Load Balancer into ECS Fargate tasks running in private subnets, as well as the CI/CD flow from GitHub Actions to ECR and ECS.
 
 ![Architecture Diagram](./screenshots/architecture-diagram.png)
 
@@ -26,7 +27,7 @@ The demo below shows the application running through the HTTPS domain, successfu
 
 - Terraform-managed AWS infrastructure across networking, compute, load balancing, DNS, HTTPS and database services.
 - ECS Fargate tasks run in private subnets behind a public Application Load Balancer.
-- Custom Docker image built from the `app/` folder and pushed to Amazon ECR.
+- Custom Docker image built from the app folder and pushed to Amazon ECR.
 - HTTPS enabled with ACM and Route 53.
 - Remote Terraform state stored in S3 with native state locking.
 - GitHub Actions CI/CD using OIDC instead of long-term AWS keys.
@@ -93,7 +94,7 @@ cd memos-on-fargate
 
 ### 2. Build the Docker image
 
-The Dockerfile is inside the `app` folder, so the Docker build context points there.
+The Dockerfile is inside the app folder, so the Docker build context points there.
 
 ```bash
 docker build -t memos-app:local ./app
@@ -217,45 +218,54 @@ Generates a Software Bill of Materials for the project. It lists the packages an
 ## Screenshots
 
 Screenshots of the deployed application and successful workflow runs.
+
 <table>
   <tr>
-    <td width="50%">
-      <img src="./screenshots/pipelines/app.png" alt="website" width="100%">
+    <td width="50%" align="center">
+      <strong>Deployed Application</strong><br><br>
+      <img src="./screenshots/pipelines/app.png" alt="Deployed application" width="100%">
     </td>
-    <td width="50%">
-      <img src="./screenshots/pipelines/ci-build-push.png" alt="building and pushing image" width="100%">
+    <td width="50%" align="center">
+      <strong>CI Build and Push</strong><br><br>
+      <img src="./screenshots/pipelines/ci-build-push.png" alt="Building and pushing image" width="100%">
     </td>
   </tr>
 </table>
 
 <table>
   <tr>
-    <td width="50%">
-      <img src="./screenshots/pipelines/tr-plan.png" alt="plan workflow" width="100%">
+    <td width="50%" align="center">
+      <strong>Terraform Plan</strong><br><br>
+      <img src="./screenshots/pipelines/tr-plan.png" alt="Terraform plan workflow" width="100%">
     </td>
-    <td width="50%">
-      <img src="./screenshots/pipelines/tr-apply.png" alt="apply workflow" width="100%">
-    </td>
-  </tr>
-</table>
-
-<table>
-  <tr>
-    <td width="50%">
-      <img src="./screenshots/pipelines/deploy.png" alt="deploy infra" width="100%">
-    </td>
-    <td width="50%">
-      <img src="./screenshots/pipelines/tr-destroy.png" alt="destroy infra" width="100%">
+    <td width="50%" align="center">
+      <strong>Terraform Apply</strong><br><br>
+      <img src="./screenshots/pipelines/tr-apply.png" alt="Terraform apply workflow" width="100%">
     </td>
   </tr>
 </table>
 
 <table>
   <tr>
-    <td width="50%">
-      <img src="./screenshots/pipelines/security-scan.png" alt="security scanning" width="100%">
+    <td width="50%" align="center">
+      <strong>ECS Deploy</strong><br><br>
+      <img src="./screenshots/pipelines/deploy.png" alt="Deploy workflow" width="100%">
     </td>
-    <td width="50%">
+    <td width="50%" align="center">
+      <strong>Terraform Destroy</strong><br><br>
+      <img src="./screenshots/pipelines/tr-destroy.png" alt="Terraform destroy workflow" width="100%">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td width="50%" align="center">
+      <strong>Security Checks</strong><br><br>
+      <img src="./screenshots/pipelines/security-scan.png" alt="Security scanning" width="100%">
+    </td>
+    <td width="50%" align="center">
+      <strong>Drift Detection</strong><br><br>
       <img src="./screenshots/pipelines/drift-detection.png" alt="Drift detection" width="100%">
     </td>
   </tr>
@@ -263,10 +273,12 @@ Screenshots of the deployed application and successful workflow runs.
 
 <table>
   <tr>
-    <td width="50%">
-      <img src="./screenshots/pipelines/dependabot.png" alt="dependabot updates" width="100%">
+    <td width="50%" align="center">
+      <strong>Dependabot Updates</strong><br><br>
+      <img src="./screenshots/pipelines/dependabot.png" alt="Dependabot updates" width="100%">
     </td>
-    <td width="50%">
+    <td width="50%" align="center">
+      <strong>SBOM Generation</strong><br><br>
       <img src="./screenshots/pipelines/sbom.png" alt="SBOM checks" width="100%">
     </td>
   </tr>
@@ -284,31 +296,35 @@ Security measures used in this project:
 - GitHub Actions OIDC instead of long-term AWS access keys
 - No hardcoded secrets in the repository
 - Image, Terraform and secret scanning through CI/CD
+- Dependabot is configured to raise dependency update pull requests.
+- SBOM generation is included for software supply chain visibility.
 
 ## Issues I Worked Through
 
 Some of the issues I had to debug during the project:
 
-- ALB showing 503 when there were no healthy ECS targets
-- ECS task failures caused by image tag or platform mismatch
-- Health check path needing to match the app endpoint
-- Terraform state lock errors during concurrent runs
-- ECS service trying to roll back task definition changes after CI/CD deployments
+- ALB returned 503 Service Temporarily Unavailable when the target group had no healthy ECS tasks.
+- ECS tasks were stopping because the container image tag and digest did not match what was available in ECR.
+- The ALB health check path had to match the application health endpoint, otherwise ECS targets stayed unhealthy.
+- Terraform state locking failed during concurrent CI/CD runs, showing why remote state locking matters.
+- ECS deployments sometimes conflicted with Terraform because the task definition was being updated by CI/CD.
 
-I debugged these by checking ECS service events, target group health, CloudWatch logs, ECR image tags, task definition settings, and Terraform state behaviour.
+I debugged these by checking ECS service events, target group health checks, CloudWatch logs, ECR image tags, task definition revisions, GitHub Actions logs, IAM role settings and Terraform state behaviour.
+
 
 ## What I Learned
 
-This project helped me understand how the main ECS deployment pieces fit together.
+This project helped me understand how the main ECS deployment pieces fit together, from Docker builds to running the app on ECS Fargate behind an HTTPS load balancer.
 
 Main takeaways:
 
-- Terraform modules make the infrastructure easier to review
-- Remote state and locking are important when using Terraform in CI/CD
-- OIDC is safer than storing long-term AWS keys in GitHub
-- Commit SHA image tags make deployments easier to trace
-- Separate workflows make problems easier to troubleshoot
-- Drift detection is useful for checking if AWS has changed outside Terraform
+- How ECS services, task definitions, target groups and ALB health checks work together.
+- Why ECS tasks should run in private subnets behind a public Application Load Balancer.
+- How to debug common ECS issues such as unhealthy targets, failed tasks and ALB 503 errors.
+- How to organise Terraform using modules, remote state and state locking.
+- How GitHub Actions can deploy to AWS securely using OIDC.
+- Why commit SHA image tags make deployments easier to trace.
+- How security checks, Dependabot, SBOM generation and drift detection improve the pipeline.
 
 ## Tech Stack
 
@@ -316,15 +332,19 @@ Main takeaways:
 - **Infrastructure as Code:** Terraform
 - **Containers:** Docker
 - **CI/CD:** GitHub Actions
-- **Security:** OIDC, Grype, Trivy, Checkov, Gitleaks, Dependabot, SBOM
+- **Security:** Github OIDC, Grype, Trivy, Checkov, Gitleaks, Dependabot, SBOM
 - **Database:** Amazon RDS
 - **Monitoring/Logs:** CloudWatch Logs
 - **Notifications:** Slack webhook
 
+
 ## Future Improvements
 
-- Add ECS blue/green deployments using AWS CodeDeploy.
-- Add more detailed CloudWatch alarms for ECS, ALB and RDS.
-- Add autoscaling policies for the ECS service.
-- Add a staging environment before production.
+- Add ECS blue/green deployments using AWS CodeDeploy for safer releases.
+- Add ECS autoscaling based on CPU, memory, or ALB request count.
+- Add CloudWatch alarms for ECS, ALB, and RDS.
+- Add a separate staging environment before production.
+- Add automated RDS backups and a clearer recovery strategy.
+- Improve monitoring with structured logs, metrics, and tracing.
 - Add more detailed application-level health checks.
+
