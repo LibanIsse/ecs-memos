@@ -119,12 +119,6 @@ The backend configuration is in:
 infra/backend.tf
 ```
 
-The real `terraform.tfvars` file is not committed to the repo. A safe example file is included instead:
-
-```text
-infra/terraform.tfvars.example
-```
-
 ## CI/CD Workflows
 
 GitHub Actions is used for the build, security checks, Terraform plan, Terraform apply, Terraform destroy, and drift detection.
