@@ -32,6 +32,7 @@ The demo below shows the application running through the HTTPS domain, successfu
 - GitHub Actions CI/CD using OIDC instead of long-term AWS keys.
 - Image scanning, Terraform scanning and secret scanning included in the workflows.
 - Multi-AZ setup using two public and two private subnets.
+- Dependabot is configured for dependency update PRs, and SBOM generation is included as a supply-chain security check.
 
 The infrastructure includes a custom multi-AZ VPC, public/private subnets, ALB, ECS Fargate, ECR, ACM, Route 53, RDS, IAM, CloudWatch Logs, and an S3 remote backend with native state locking.
 
@@ -285,7 +286,7 @@ Main takeaways:
 - **Infrastructure as Code:** Terraform
 - **Containers:** Docker
 - **CI/CD:** GitHub Actions
-- **Security:** OIDC, Grype, Trivy, Checkov, Gitleaks
+- **Security:** OIDC, Grype, Trivy, Checkov, Gitleaks, Dependabot, SBOM
 - **Database:** Amazon RDS
 - **Monitoring/Logs:** CloudWatch Logs
 - **Notifications:** Slack webhook
