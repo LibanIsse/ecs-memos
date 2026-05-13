@@ -38,6 +38,7 @@ The infrastructure includes a custom multi-AZ VPC, public/private subnets, ALB, 
 
 ## Repository Structure
 
+```
 MEMOS-ON-FARGATE
 ├── app/                         # Application source code and Dockerfile
 │   ├── Dockerfile
@@ -79,6 +80,7 @@ MEMOS-ON-FARGATE
 │
 ├── .gitignore
 └── README.md
+```
 
 ## Local Setup
 
